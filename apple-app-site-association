@@ -1,0 +1,11 @@
+{
+	"applinks": {
+		"apps": [],
+		"details": [
+			{
+				"appID": "KTS29DB5CZ.com.icabana.AppUniversalLinks",
+				"paths": ["*"]
+			}
+		]
+	}
+}
