@@ -1,52 +1,57 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>My Cat</title>
-        <link rel="stylesheet" type="text/css" href="app.css">
-        <script>
-            function setCookie(cname,cvalue,exdays) {
-              var d = new Date();
-              d.setTime(d.getTime() + (exdays*24*60*60*1000));
-              var expires = "expires=" + d.toGMTString();
-              document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-            }
-            
-            function getCookie(cname) {
-              var name = cname + "=";
-              var decodedCookie = decodeURIComponent(document.cookie);
-              var ca = decodedCookie.split(';');
-              for(var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                  c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                  return c.substring(name.length, c.length);
-                }
-              }
-              return "";
-            }
-            
-            function checkCookie() {
-              var user=getCookie("username");
-              if (user != "") {
-                alert("Welcome again " + user);
-              } else {
-                 user = prompt("Please enter your name:","");
-                 if (user != "" && user != null) {
-                   setCookie("username", user, 30);
-                 }
-              }
-            }
-            </script>
-    </head>
-    <body onload="checkCookie()">
-        <section id="container">
-            <h1>This is My new Cat</h1>
-            <img src="imgs/cat_image_1.jpg">
 
-            <button>Get Next Photo</button>
-            <p>She currently has no name. Please help me name her.</p>
-        </section>
-    </body>
+<head>
+  <title>My Cat</title>
+  <link rel="stylesheet" type="text/css" href="app.css">
+  <script>
+    /**
+* Copies to Clipboard value
+* @param {String} valueForClipboard value to be copied
+* @param {Boolean} isIOS is current browser is Ios (Mobile Safari)
+* @return {boolean} shows if copy has been successful
+*/
+    const copyToClipboard = (valueForClipboard, isIOS) => {
+      const textArea = document.createElement('textarea');
+      textArea.value = valueForClipboard;
+
+      textArea.style.position = 'absolute';
+      textArea.style.left = '-9999px'; // to make it invisible and out of the reach
+      textArea.setAttribute('readonly', ''); // without it, the native keyboard will pop up (so we show it is only for reading)
+
+      document.body.appendChild(textArea);
+
+      if (isIOS) {
+        const range = document.createRange();
+        range.selectNodeContents(textArea);
+
+        const selection = window.getSelection();
+        selection.removeAllRanges(); // remove previously selected ranges
+        selection.addRange(range);
+        textArea.setSelectionRange(0, valueForClipboard.length); // this line makes the selection in iOS
+      } else {
+        textArea.select(); // this line is for all other browsers except ios
+      }
+
+      try {
+        return document.execCommand('copy'); // if copy is successful, function returns true
+      } catch (e) {
+        return false; // return false to show that copy unsuccessful
+      } finally {
+        document.body.removeChild(textArea); // delete textarea from DOM
+      }
+    };
+  </script>
+</head>
+
+<body onload="copyToClipboard">
+  <section id="container">
+    <h1>This is My new Cat</h1>
+    <img src="imgs/cat_image_1.jpg">
+
+    <button>Get Next Photo</button>
+    <p>She currently has no name. Please help me name her.</p>
+  </section>
+</body>
+
 </html>
